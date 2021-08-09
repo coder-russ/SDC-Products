@@ -1,2 +1,2 @@
-# SDC2021
+# SDC Products
 Systems Design Capstone
