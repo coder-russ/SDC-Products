@@ -25,7 +25,7 @@ router.get('/products/:id', (req, res) => {
 });
 
 router.get('/products/:id/styles', (req, res) => {
-  db.getProductStyles()
+  db.getProductStyles(req.params.id)
     .then((data) => res.send(data))
     .catch((err) => res.send(err));
 });
