@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 class styles extends Sequelize.Model {
   static init(sequelize, DataTypes) {
     super.init({
-      id: {
+      style_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
