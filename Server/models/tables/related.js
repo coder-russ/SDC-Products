@@ -8,7 +8,7 @@ class related extends Sequelize.Model {
         allowNull: false,
         primaryKey: true,
       },
-      products_id: {
+      product_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

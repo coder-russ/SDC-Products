@@ -18,7 +18,20 @@ module.exports = {
       attributes: ['feature', 'value'],
       where: { product_id: productId },
     });
-    return Promise.all([promise1, promise2]);
+    return Promise.all([promise1, promise2])
+      .then((array) => {
+        const result = {
+          id: array[0][0].dataValues.id,
+          name: array[0][0].dataValues.name,
+          slogan: array[0][0].dataValues.slogan,
+          description: array[0][0].dataValues.description,
+          category: array[0][0].dataValues.category,
+          default_price: array[0][0].dataValues.default_price,
+          features: array[1],
+        };
+        return result;
+      })
+      .catch((err) => err);
   },
   getProductStyles: (productId) => {
     const dataObject = {
@@ -72,7 +85,17 @@ module.exports = {
         }
         return dataObject;
       })
-      .catch((err) => console.log(err));
+      .catch((err) => err);
   },
-  getProductRelated: () => 'placeholder',
+  getProductRelated: (productId) => models.related.findAll({
+    where: { product_id: productId },
+  })
+    .then((data) => {
+      const related = [];
+      data.forEach((item) => {
+        related.push(item.dataValues.related_product_id);
+      });
+      return related;
+    })
+    .catch((err) => err),
 };
