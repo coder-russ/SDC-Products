@@ -25,26 +25,48 @@ module.exports = {
       product_id: productId.toString(),
       results: [],
     };
+    const skuArray = [];
     return models.styles.findAll({
       where: { product_id: productId },
     })
       .then((data) => {
-        const promiseArray = [];
+        const photoArray = [];
         data.forEach((style) => {
           dataObject.results.push(style.dataValues);
-          promiseArray.push(models.photos.findAll({
+          skuArray.push(models.skus.findAll({
+            attributes: ['id', 'quantity', 'size'],
+            where: { style_id: style.dataValues.style_id },
+          }));
+          photoArray.push(models.photos.findAll({
             attributes: ['thumbnail_url', 'url'],
-            where: { style_id: style.dataValues.id },
+            where: { style_id: style.dataValues.style_id },
           }));
         });
-        return Promise.all(promiseArray);
+        return Promise.all(photoArray);
+      })
+      .then((array) => {
+        for (let i = 0; i < dataObject.results.length; i += 1) {
+          dataObject.results[i].photos = [];
+          array.forEach((promise) => {
+            promise.forEach((photo) => {
+              dataObject.results[i].photos = dataObject.results[i].photos.concat(photo.dataValues);
+            });
+          });
+        }
+        return Promise.all(skuArray);
       })
       .then((array) => {
         for (let i = 0; i < dataObject.results.length; i += 1) {
           array.forEach((promise) => {
-            promise.forEach((photo) => {
-              dataObject.results[i].photos = [];
-              dataObject.results[i].photos = dataObject.results[i].photos.concat(photo.dataValues);
+            promise.forEach((sku) => {
+              const skuObject = {
+                [sku.dataValues.id]: {
+                  quantity: sku.dataValues.quantity,
+                  size: sku.dataValues.size,
+                },
+              };
+              const existingSkus = dataObject.results[i].skus;
+              dataObject.results[i].skus = { ...existingSkus, ...skuObject };
             });
           });
         }
