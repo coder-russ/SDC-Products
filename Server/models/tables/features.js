@@ -37,6 +37,13 @@ class features extends Sequelize.Model {
             { name: 'id' },
           ],
         },
+        {
+          name: 'productId_pkey2',
+          unique: true,
+          fields: [
+            { name: 'product_id' },
+          ],
+        },
       ],
     });
     return features;

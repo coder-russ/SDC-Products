@@ -37,6 +37,13 @@ class skus extends Sequelize.Model {
             { name: 'id' },
           ],
         },
+        {
+          name: 'style_id_pkey',
+          unique: true,
+          fields: [
+            { name: 'style_id' },
+          ],
+        },
       ],
     });
     return skus;

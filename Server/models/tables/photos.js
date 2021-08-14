@@ -37,6 +37,13 @@ class photos extends Sequelize.Model {
             { name: 'id' },
           ],
         },
+        {
+          name: 'styleId_pkey',
+          unique: true,
+          fields: [
+            { name: 'style_id' },
+          ],
+        },
       ],
     });
     return photos;

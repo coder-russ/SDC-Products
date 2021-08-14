@@ -33,6 +33,13 @@ class related extends Sequelize.Model {
             { name: 'id' },
           ],
         },
+        {
+          name: 'productId_pkey',
+          unique: true,
+          fields: [
+            { name: 'product_id' },
+          ],
+        },
       ],
     });
     return related;

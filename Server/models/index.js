@@ -4,12 +4,16 @@ const { initModels } = require('./tables/init-models');
 const models = initModels(sequelize);
 
 module.exports = {
+  // Get list of products (default is 5)
   getProducts: (query) => {
-    const page = query.page || 1;
-    const count = query.count || 5;
-    const total = Number(page) * Number(count);
-    return models.product.findAll({ limit: total });
+    const count = query.count ? Number(query.count) : 5;
+    const page = query.page ? Number(query.page) - 1 : 0;
+    return models.product.findAll({
+      limit: count,
+      offset: page * count,
+    });
   },
+  // Get data for specified product id including features
   getProductId: (productId) => {
     const promise1 = models.product.findAll({
       where: { id: productId },
@@ -33,60 +37,36 @@ module.exports = {
       })
       .catch((err) => err);
   },
+  // Get styles data with list of photos and skus
   getProductStyles: (productId) => {
     const dataObject = {
-      product_id: productId.toString(),
+      product_id: productId,
       results: [],
     };
-    const skuArray = [];
     return models.styles.findAll({
       where: { product_id: productId },
+      include: [
+        { model: models.photos, as: 'photos', attributes: ['thumbnail_url', 'url'] },
+        { model: models.skus, as: 'skus' },
+      ],
     })
       .then((data) => {
-        const photoArray = [];
         data.forEach((style) => {
           dataObject.results.push(style.dataValues);
-          skuArray.push(models.skus.findAll({
-            attributes: ['id', 'quantity', 'size'],
-            where: { style_id: style.dataValues.style_id },
-          }));
-          photoArray.push(models.photos.findAll({
-            attributes: ['thumbnail_url', 'url'],
-            where: { style_id: style.dataValues.style_id },
-          }));
+          const skuObject = {};
+          style.dataValues.skus.forEach((sku) => {
+            skuObject[sku.id] = { quantity: sku.quantity, size: sku.size };
+          });
+          dataObject.results.forEach((result) => {
+            // eslint-disable-next-line no-param-reassign
+            result.skus = skuObject;
+          });
         });
-        return Promise.all(photoArray);
-      })
-      .then((array) => {
-        for (let i = 0; i < dataObject.results.length; i += 1) {
-          dataObject.results[i].photos = [];
-          array.forEach((promise) => {
-            promise.forEach((photo) => {
-              dataObject.results[i].photos = dataObject.results[i].photos.concat(photo.dataValues);
-            });
-          });
-        }
-        return Promise.all(skuArray);
-      })
-      .then((array) => {
-        for (let i = 0; i < dataObject.results.length; i += 1) {
-          array.forEach((promise) => {
-            promise.forEach((sku) => {
-              const skuObject = {
-                [sku.dataValues.id]: {
-                  quantity: sku.dataValues.quantity,
-                  size: sku.dataValues.size,
-                },
-              };
-              const existingSkus = dataObject.results[i].skus;
-              dataObject.results[i].skus = { ...existingSkus, ...skuObject };
-            });
-          });
-        }
         return dataObject;
       })
       .catch((err) => err);
   },
+  // Get list of related products for specified product id
   getProductRelated: (productId) => models.related.findAll({
     where: { product_id: productId },
   })
@@ -98,4 +78,8 @@ module.exports = {
       return related;
     })
     .catch((err) => err),
+  // Route to test opitimizations
+  getTest: (productId) => models.product.findAll({
+    where: { product_id: productId },
+  }),
 };

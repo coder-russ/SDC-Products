@@ -25,4 +25,10 @@ router.get('/products/:id/related', (req, res) => {
     .catch((err) => res.send(err));
 });
 
+router.get('/test/:id', (req, res) => {
+  db.getTest(req.params.id)
+    .then((data) => res.send(data))
+    .catch((err) => res.send(err));
+});
+
 module.exports = router;
