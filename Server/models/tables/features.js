@@ -13,7 +13,7 @@ class features extends Sequelize.Model {
         allowNull: true,
         references: {
           model: 'product',
-          key: 'id',
+          key: 'product_id',
         },
       },
       feature: {

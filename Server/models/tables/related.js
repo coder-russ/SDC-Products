@@ -13,7 +13,7 @@ class related extends Sequelize.Model {
         allowNull: false,
         references: {
           model: 'product',
-          key: 'id',
+          key: 'product_id',
         },
       },
       related_product_id: {

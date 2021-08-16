@@ -14,29 +14,10 @@ module.exports = {
     });
   },
   // Get data for specified product id including features
-  getProductId: (productId) => {
-    const promise1 = models.product.findAll({
-      where: { id: productId },
-    });
-    const promise2 = models.features.findAll({
-      attributes: ['feature', 'value'],
-      where: { product_id: productId },
-    });
-    return Promise.all([promise1, promise2])
-      .then((array) => {
-        const result = {
-          id: array[0][0].dataValues.id,
-          name: array[0][0].dataValues.name,
-          slogan: array[0][0].dataValues.slogan,
-          description: array[0][0].dataValues.description,
-          category: array[0][0].dataValues.category,
-          default_price: array[0][0].dataValues.default_price,
-          features: array[1],
-        };
-        return result;
-      })
-      .catch((err) => err);
-  },
+  getProductId: (productId) => models.product.findAll({
+    where: { product_id: productId },
+    include: { model: models.features, as: 'features', attributes: ['feature', 'value'] },
+  }),
   // Get styles data with list of photos and skus
   getProductStyles: (productId) => {
     const dataObject = {
@@ -51,16 +32,13 @@ module.exports = {
       ],
     })
       .then((data) => {
-        data.forEach((style) => {
+        data.forEach((style, index) => {
           dataObject.results.push(style.dataValues);
           const skuObject = {};
           style.dataValues.skus.forEach((sku) => {
             skuObject[sku.id] = { quantity: sku.quantity, size: sku.size };
           });
-          dataObject.results.forEach((result) => {
-            // eslint-disable-next-line no-param-reassign
-            result.skus = skuObject;
-          });
+          dataObject.results[index].skus = skuObject;
         });
         return dataObject;
       })
@@ -81,5 +59,6 @@ module.exports = {
   // Route to test opitimizations
   getTest: (productId) => models.product.findAll({
     where: { product_id: productId },
+    include: { model: models.features, as: 'features', attributes: ['feature', 'value'] },
   }),
 };
