@@ -1,4 +1,6 @@
+require('newrelic');
 const express = require('express');
+const compression = require('compression');
 const sequelize = require('./db');
 
 const app = express();
@@ -6,6 +8,7 @@ const port = 3000;
 const router = require('./routes');
 
 app.use(express.json());
+app.use(compression());
 
 app.use('/', router);
 
