@@ -13,7 +13,7 @@ class features extends Sequelize.Model {
         allowNull: true,
         references: {
           model: 'product',
-          key: 'id',
+          key: 'product_id',
         },
       },
       feature: {
@@ -35,6 +35,13 @@ class features extends Sequelize.Model {
           unique: true,
           fields: [
             { name: 'id' },
+          ],
+        },
+        {
+          name: 'productId_pkey2',
+          unique: true,
+          fields: [
+            { name: 'product_id' },
           ],
         },
       ],

@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 class product extends Sequelize.Model {
   static init(sequelize, DataTypes) {
     super.init({
-      id: {
+      product_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
@@ -38,7 +38,7 @@ class product extends Sequelize.Model {
           name: 'product_pkey',
           unique: true,
           fields: [
-            { name: 'id' },
+            { name: 'product_id' },
           ],
         },
       ],

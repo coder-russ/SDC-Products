@@ -13,7 +13,7 @@ class related extends Sequelize.Model {
         allowNull: false,
         references: {
           model: 'product',
-          key: 'id',
+          key: 'product_id',
         },
       },
       related_product_id: {
@@ -31,6 +31,13 @@ class related extends Sequelize.Model {
           unique: true,
           fields: [
             { name: 'id' },
+          ],
+        },
+        {
+          name: 'productId_pkey',
+          unique: true,
+          fields: [
+            { name: 'product_id' },
           ],
         },
       ],

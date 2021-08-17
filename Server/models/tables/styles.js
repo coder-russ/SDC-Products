@@ -13,7 +13,7 @@ class styles extends Sequelize.Model {
         allowNull: false,
         references: {
           model: 'product',
-          key: 'id',
+          key: 'product_id',
         },
       },
       name: {
@@ -42,7 +42,14 @@ class styles extends Sequelize.Model {
           name: 'styles_pkey',
           unique: true,
           fields: [
-            { name: 'id' },
+            { name: 'style_id' },
+          ],
+        },
+        {
+          name: 'product_id_pkey',
+          unique: true,
+          fields: [
+            { name: 'product_id' },
           ],
         },
       ],
