@@ -23,7 +23,6 @@ class related extends Sequelize.Model {
     }, {
       sequelize,
       tableName: 'related',
-      schema: 'public',
       timestamps: false,
       indexes: [
         {
@@ -35,7 +34,7 @@ class related extends Sequelize.Model {
         },
         {
           name: 'productId_pkey',
-          unique: true,
+          unique: false,
           fields: [
             { name: 'product_id' },
           ],

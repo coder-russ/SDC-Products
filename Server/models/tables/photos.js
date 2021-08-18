@@ -13,21 +13,20 @@ class photos extends Sequelize.Model {
         allowNull: false,
         references: {
           model: 'styles',
-          key: 'id',
+          key: 'style_id',
         },
       },
       url: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
       },
       thumbnail_url: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
       },
     }, {
       sequelize,
       tableName: 'photos',
-      schema: 'public',
       timestamps: false,
       indexes: [
         {
@@ -39,7 +38,7 @@ class photos extends Sequelize.Model {
         },
         {
           name: 'styleId_pkey',
-          unique: true,
+          unique: false,
           fields: [
             { name: 'style_id' },
           ],

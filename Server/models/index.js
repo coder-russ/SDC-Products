@@ -38,6 +38,7 @@ module.exports = {
       limit: count,
       offset: page * count,
       raw: true,
+      order: [['product_id', 'ASC']],
     });
   },
   // Get data for specified product id including features
@@ -46,26 +47,20 @@ module.exports = {
     include: { model: models.features, as: 'features', attributes: ['feature', 'value'] },
   }),
   // Route to test opitimizations
-  // getTest: (productId) => models.styles.findAll({
-  //   where: { product_id: productId },
-  //   include: [
-  //     {
-  //       model: models.photos,
-  //       as: 'photos',
-  //       attributes: ['thumbnail_url', 'url'],
-  //     },
-  //     {
-  //       model: models.skus,
-  //       as: 'skus',
-  //       attributes: { exclude: ['style_id'] },
-  //     },
-  //   ],
-  //   attributes: { exclude: ['product_id'] },
-  // })
-  //   .then((data) => {
-  //     debugger;
-  //     const dataObject = { product_id: productId, results: data };
-  //     return dataObject;
-  //   })
-  //   .catch((err) => err),
+  getTest: (productId) => models.styles.findAll({
+    where: { product_id: productId },
+    include: [
+      {
+        model: models.photos,
+        as: 'photos',
+        attributes: ['thumbnail_url', 'url'],
+      },
+      {
+        model: models.skus,
+        as: 'skus',
+        attributes: [[sequelize.fn('json_object_agg', '*')]],
+      },
+    ],
+    attributes: { exclude: ['product_id'] },
+  }),
 };
