@@ -13,21 +13,31 @@ class skus extends Sequelize.Model {
         allowNull: false,
         references: {
           model: 'styles',
-          key: 'id',
+          key: 'style_id',
         },
-      },
-      quantity: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
       },
       size: {
         type: DataTypes.STRING(20),
         allowNull: true,
       },
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      // skuObject: {
+      //   type: DataTypes.VIRTUAL,
+      //   get() {
+      //     return {
+      //       [this.id]: {
+      //         quantity: this.quantity,
+      //         size: this.size,
+      //       },
+      //     };
+      //   },
+      // },
     }, {
       sequelize,
       tableName: 'skus',
-      schema: 'public',
       timestamps: false,
       indexes: [
         {
@@ -39,7 +49,7 @@ class skus extends Sequelize.Model {
         },
         {
           name: 'style_id_pkey',
-          unique: true,
+          unique: false,
           fields: [
             { name: 'style_id' },
           ],

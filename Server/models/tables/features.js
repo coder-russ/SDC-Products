@@ -27,7 +27,6 @@ class features extends Sequelize.Model {
     }, {
       sequelize,
       tableName: 'features',
-      schema: 'public',
       timestamps: false,
       indexes: [
         {
@@ -39,7 +38,7 @@ class features extends Sequelize.Model {
         },
         {
           name: 'productId_pkey2',
-          unique: true,
+          unique: false,
           fields: [
             { name: 'product_id' },
           ],

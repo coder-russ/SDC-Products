@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # new relic config file
-newrelic.js
+newrelic3.js

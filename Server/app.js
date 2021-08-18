@@ -15,5 +15,6 @@ app.use('/', router);
 app.listen(port, () => console.log('Server listening on port ', port));
 
 sequelize.authenticate()
-  .then(() => console.log('Postgres connection has been established successfully'))
+  .then(() => sequelize.sync({ alter: true }))
+  .then(() => console.log('Database Successfully Connected and Synced'))
   .catch((err) => console.log('Unable to connect to Postgres DB: ', err));

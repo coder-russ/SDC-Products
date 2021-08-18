@@ -25,13 +25,12 @@ class product extends Sequelize.Model {
         allowNull: true,
       },
       default_price: {
-        type: DataTypes.STRING,
+        type: DataTypes.NUMERIC(10, 2),
         allowNull: true,
       },
     }, {
       sequelize,
       tableName: 'product',
-      schema: 'public',
       timestamps: false,
       indexes: [
         {

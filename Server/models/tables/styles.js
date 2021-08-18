@@ -21,11 +21,11 @@ class styles extends Sequelize.Model {
         allowNull: true,
       },
       sale_price: {
-        type: DataTypes.STRING,
+        type: DataTypes.NUMERIC(50, 2),
         allowNull: true,
       },
       original_price: {
-        type: DataTypes.STRING,
+        type: DataTypes.NUMERIC(50, 2),
         allowNull: true,
       },
       default_style: {
@@ -35,7 +35,6 @@ class styles extends Sequelize.Model {
     }, {
       sequelize,
       tableName: 'styles',
-      schema: 'public',
       timestamps: false,
       indexes: [
         {
@@ -47,7 +46,7 @@ class styles extends Sequelize.Model {
         },
         {
           name: 'product_id_pkey',
-          unique: true,
+          unique: false,
           fields: [
             { name: 'product_id' },
           ],
